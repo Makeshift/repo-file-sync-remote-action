@@ -19,7 +19,8 @@ const {
 	COMMIT_AS_PR_TITLE,
 	FORK,
 	REVIEWERS,
-	TEAM_REVIEWERS
+	TEAM_REVIEWERS,
+	PULL_INSTEAD_OF_PUSH
 } = require('./config')
 
 const run = async () => {
@@ -68,8 +69,11 @@ const run = async () => {
 				if (destExists === true && file.replace === false) return core.warning(`File(s) already exist(s) in destination and 'replace' option is set to false`)
 
 				const isDirectory = await pathIsDirectory(file.source)
-				const source = isDirectory ? `${ addTrailingSlash(file.source) }` : file.source
-				const dest = isDirectory ? `${ addTrailingSlash(localDestination) }` : localDestination
+				let source = isDirectory ? `${ addTrailingSlash(file.source) }` : file.source
+				let dest = isDirectory ? `${ addTrailingSlash(localDestination) }` : localDestination
+				if (PULL_INSTEAD_OF_PUSH) {
+					[ source, dest ] = [ dest, source ]
+				}
 
 				if (isDirectory) core.info(`Source is directory`)
 

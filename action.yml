@@ -12,7 +12,7 @@ inputs:
       GitHub App Installation Token to used to access repos
     required: false
   CONFIG_PATH:
-    description: | 
+    description: |
       The path for the sync configuration file
     required: false
   PR_LABELS:
@@ -91,6 +91,11 @@ inputs:
     description: |
       Specify the user account that will be used in a fork and pull-request workflow. Defaults
       false.
+    required: false
+  PULL_INSTEAD_OF_PUSH:
+    description: |
+      Specify if the action should pull from the source repo instead of pushing to the target repo. Set this to true to have the
+      action pull files into the current repository instead of push to a remote one. Defaults to false
     required: false
 
 outputs:

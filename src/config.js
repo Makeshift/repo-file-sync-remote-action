@@ -122,7 +122,12 @@ try {
 			key: 'FORK',
 			default: false,
 			disableable: true
-		})
+		}),
+		PULL_INSTEAD_OF_PUSH: getInput({
+			key: 'PULL_INSTEAD_OF_PUSH',
+			default: false,
+			disableable: true
+		}),
 	}
 
 	core.setSecret(context.GITHUB_TOKEN)

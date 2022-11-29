@@ -29911,7 +29911,12 @@ try {
 			key: 'FORK',
 			default: false,
 			disableable: true
-		})
+		}),
+		PULL_INSTEAD_OF_PUSH: getInput({
+			key: 'PULL_INSTEAD_OF_PUSH',
+			default: false,
+			disableable: true
+		}),
 	}
 
 	core.setSecret(context.GITHUB_TOKEN)
@@ -30036,6 +30041,7 @@ module.exports = {
 	...context,
 	parseConfig
 }
+
 
 /***/ }),
 
@@ -30958,7 +30964,8 @@ const {
 	COMMIT_AS_PR_TITLE,
 	FORK,
 	REVIEWERS,
-	TEAM_REVIEWERS
+	TEAM_REVIEWERS,
+	PULL_INSTEAD_OF_PUSH
 } = __nccwpck_require__(4570)
 
 const run = async () => {
@@ -31007,8 +31014,11 @@ const run = async () => {
 				if (destExists === true && file.replace === false) return core.warning(`File(s) already exist(s) in destination and 'replace' option is set to false`)
 
 				const isDirectory = await pathIsDirectory(file.source)
-				const source = isDirectory ? `${ addTrailingSlash(file.source) }` : file.source
-				const dest = isDirectory ? `${ addTrailingSlash(localDestination) }` : localDestination
+				let source = isDirectory ? `${ addTrailingSlash(file.source) }` : file.source
+				let dest = isDirectory ? `${ addTrailingSlash(localDestination) }` : localDestination
+				if (PULL_INSTEAD_OF_PUSH) {
+					[ source, dest ] = [ dest, source ]
+				}
 
 				if (isDirectory) core.info(`Source is directory`)
 
@@ -31160,6 +31170,7 @@ run()
 		core.setFailed(err.message)
 		core.debug(err)
 	})
+
 })();
 
 module.exports = __webpack_exports__;
